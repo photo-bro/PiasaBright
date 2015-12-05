@@ -23,7 +23,7 @@ auth = HTTPBasicAuth()
 ## URL Routes
 # Add resources 
 api.add_resource(Ping, '/' )
-api.add_resource(Login, '/login')
+api.add_resource(Login, '/auth')
 api.add_resource(ScheduleApi, '/schedules/<int:id>')
 api.add_resource(PresetApi, '/presets/<int:id>')
 api.add_resource(FixtureApi, '/fixtures/<int:id>')

@@ -7,7 +7,7 @@ from flask_restful import Resource, reqparse
 
 # local imports
 from Facade import *
-from Session import Session
+from Session import SessionManager
 from Users import User
 
 class Ping(Resource):
@@ -27,12 +27,11 @@ class Login(Resource):
     
     def post(self):
         args = self.requestParser.parse_args()
-        for k, v in args:
-            print('{} : {}'.format(k, v))
         if User.IsAuthorized(args['username'], args['password']):
-            sessionId = Session.CreateActiveSession(args['username'])
-            return {'message':'User {} authorized'.format(args['username']),
-                     'sid':sessionId}
+            newSession = SessionManager.CreateActiveSession(args['username'])
+            return { 'message':'User: {} is authorized'.format(args['username']),
+                     'sid': newSession.id,
+                     'active':newSession.activePeriod}
         else:
             return {'message':'User not authorized'}
     
