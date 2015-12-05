@@ -4,6 +4,7 @@ Created on Dec 3, 2015
 @author: jharm
 '''
 from flask_restful import Resource
+from AppLogic.Fixture import FixtureManager, Fixture, FixtureType
 
 class ScheduleApi(Resource):
     def get(self, id):
@@ -17,7 +18,7 @@ class ScheduleApi(Resource):
     
 class PresetApi(Resource):
     def get(self, id):
-        pass
+       pass
     def post(self):
         pass
     def delete(self):
@@ -26,8 +27,11 @@ class PresetApi(Resource):
         pass
     
 class FixtureApi(Resource):
+    
     def get(self, id):
-        pass
+        f = Fixture('IkeaLamp', 'downstairs', FixtureType.Light, 100)
+        return {'fixtures' : f.ToDictionary() }
+    
     def post(self):
         pass
     def delete(self):

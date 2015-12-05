@@ -4,7 +4,6 @@ Created on Dec 3, 2015
 @author: jharm
 '''
 import uuid, time
-from builtins import classmethod
 
 class SessionManager:
     __activeSessions = []

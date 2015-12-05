@@ -4,7 +4,6 @@ Created on Dec 3, 2015
 @author: jharm
 '''
 
-
 class User:
     __users = {'josh':'1234'}
     

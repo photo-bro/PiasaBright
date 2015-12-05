@@ -12,7 +12,7 @@ from flask_restful import Api
 from flask_httpauth import HTTPBasicAuth
 
 # local
-from Resources.BaseApi import Ping, Login
+from Resources.BaseApi import Ping, Auth
 from Resources.AppApi import ScheduleApi, PresetApi, FixtureApi
 
 app = Flask(__name__)
@@ -23,7 +23,7 @@ auth = HTTPBasicAuth()
 ## URL Routes
 # Add resources 
 api.add_resource(Ping, '/' )
-api.add_resource(Login, '/auth')
+api.add_resource(Auth, '/auth')
 api.add_resource(ScheduleApi, '/schedules/<int:id>')
 api.add_resource(PresetApi, '/presets/<int:id>')
 api.add_resource(FixtureApi, '/fixtures/<int:id>')
