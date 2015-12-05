@@ -1,4 +1,4 @@
-PRAGMA foreign_keys = on
+PRAGMA foreign_keys = on;
 
 CREATE TABLE Fixture
     (FixtureId      INT PRIMARY KEY NOT NULL AUTOINCREMENT,
