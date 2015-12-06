@@ -4,7 +4,8 @@ CREATE TABLE Fixture
     (FixtureId      INT PRIMARY KEY NOT NULL AUTOINCREMENT,
     Name            VARCHAR(50)     NOT NULL,
     Location        VARCHAR(5)      NOT NULL,
-    Brightness      INT             NOT NULL);
+    Brightness      INT             NOT NULL,
+    FixtureType     INT             NOT NULL);
     
 CREATE TABLE Preset
     (PresetId       INT PRIMARY KEY NOT NULL AUTOINCREMENT,
@@ -30,3 +31,10 @@ CREATE TABLE PresetScheduleAssoc
     ScheduleId      INT NOT NULL,
     FOREIGN KEY (PresetId) REFERENCES Preset(Preset),
     FOREIGN KEY (ScheduleId) REFERENCES Schedule(ScheduleId) );
+    
+CREATE TABLE User
+    (UserId         INT PRIMARY KEY NOT NULL AUTOINCREMENT,
+    FirstName       VARCHAR(50) NOT NULL,
+    LastName        VARCHAR(50) NOT NULL, 
+    UserName        VARCHAR(50) NOT NULL,
+    Password        VARCHAR(50) NOT NULL );

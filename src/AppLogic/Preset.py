@@ -3,24 +3,49 @@ Created on Dec 3, 2015
 
 @author: jharm
 '''
+from DB import Database
 
 class PresetManager():
-    __Presets = []
     
-    @classmethod
-    def Add(cls, preset):
-        cls.__Presets.append(preset)
-
-    @classmethod
-    def Remove(cls, preset):
-        try:
-            cls.__Presets.remove(preset)
-        except:
-            pass
-
+    def Add(self, preset, fixtures):
+        # Insert new preset first
+        insertProc = 'INSERT INTO Preset (Name,) \
+                      VALUES ({0})'.format(preset.Name)
+        Database.ExecuteScript(insertProc)
+        # Get id of new preset
+        idProc = 'SELECT PresetId \
+                  FROM Preset p \
+                  WHERE p.Name = {0}'.format(preset.Name)
+        idRows = Database.ExecuteScript(idProc)
+        presetId = idRows['PresetId']
+        # Add relation to fixtures via FixturePresetAssoc rows
+        assocProc = ''
+        for f in fixtures:
+            assocProc += 'INSERT INTO FixturePresetAssoc (FixtureId, PresetId)\
+                          VALUES ({0}, {1});'.format(f.Id, presetId)
+        Database.ExecuteScript(assocProc)
+    
+    def Remove(self, preset):
+        pass
+    def GetPresets(self):
+        proc = 'SELECT p.PresetId, p.Name, f.FixtureId \
+                FROM Preset'
+                
+                
+                
+                
+                
+                
+        rows = Database.ExecuteScript(presetProc)
+        
+        
+    def GetPreset(self, id):
+        
+    
 class Preset():
     
-    def __init__(self):
+    def __init__(self, id, name, fixtures):
+        self.Id
         self.Name = ""
         self.Fixtures = []
         
