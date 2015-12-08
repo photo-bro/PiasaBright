@@ -28,9 +28,15 @@ class PresetApi(Resource):
     
 class FixtureApi(Resource):
     
+    def __init__(self):
+        self.FixManager = FixtureManager()
+        
     def get(self, id):
-        f = Fixture('IkeaLamp', 'downstairs', FixtureType.Light, 100)
-        return {'fixtures' : f.ToDictionary() }
+        fixtures = self.FixManager.GetFixtures()
+        s = {}
+        for f in fixtures:
+            s.append(f.ToDictionary())
+        return {'fixtures' : s }
     
     def post(self):
         pass

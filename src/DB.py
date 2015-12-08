@@ -3,23 +3,27 @@ Created on Dec 5, 2015
 
 @author: jharm
 '''
-import sqlite3
+import sqlite3, os
 from Singleton import Singleton
 
-@Singleton
 class Database:
     _connection = None
     _cursor = None
-
+    _isConnected = False
     @classmethod
     def OpenDb(cls):
         if cls._connection is None or cls._cursor is None:
-            cls._connection = sqlite3.connect('PiasaBright.db')
+            cls._connection = sqlite3.connect('PiasaBright.db', check_same_thread=False)
             cls._cursor = cls._connection.cursor()
+            cls._isConnected = True
     
     @classmethod
     def GenerateDb(cls):
-        cls.ExeceuteScriptFile('CreateDb')
+        path = os.path.dirname(__file__)
+        with open (path + '/SqlScripts/' + 'CreateDB' + '.sql', "r") as myfile:
+            data=myfile.read()
+        cls._cursor.executescript(data)
+         
     
     @classmethod
     def ExeceuteScriptFile(cls, script):
@@ -41,6 +45,7 @@ class Database:
             raise
         except:
             return []
+        
     @classmethod
     def ExecuteScript(cls, script):
         if not cls.IsConnected():
@@ -53,11 +58,12 @@ class Database:
     
     @classmethod
     def IsConnected(cls):
-        return cls._cursor == None
+        return cls._isConnected
     
 class ProcedureManager:
     
-    def GetProcedure(self, procedureName, arguments):
+    @staticmethod
+    def GetProcedure( procedureName, arguments):
         '''
         procedureName: File name for SQL script sans '.sql'. Must be in local
         /SqlScripts folder
@@ -65,16 +71,18 @@ class ProcedureManager:
         is the placeholder name in script that argumentValue will replace
         '''
         # open procedure file
+        path = os.path.dirname(__file__)
         try:
-            with open('SqlScripts/' + procedureName + '.sql', 'r') as procFile:
+            with open(path + '/SqlScripts/' + procedureName + '.sql', 'r') as procFile:
                 rawProc = procFile.read()
         except FileNotFoundError:
             raise
         
         # replace placeholder names with arguments
-        for argName, argVal in arguments:
-            rawProc.replace('&{}&'.format(argName), argVal)
-            
+        if arguments:
+            for argName, argVal in arguments.items():
+                rawProc = rawProc.replace('&{}&'.format(argName), argVal)
+                        
         return rawProc
         
         

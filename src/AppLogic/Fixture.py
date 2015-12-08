@@ -3,13 +3,13 @@ Created on Dec 3, 2015
 
 @author: jharm
 '''
-from DB import Database
+from DB import Database, ProcedureManager
 
 class FixtureManager():
     
     def __init__(self):
-        self.DB = Database.Instance
-        if not Database.IsConnected()
+        self.DB = Database()
+        if not Database.IsConnected():
             self.DB.OpenDb()
 
     def Add(self, fixture):
@@ -26,23 +26,25 @@ class FixtureManager():
         return Database.ExecuteScript(proc)
     
     def GetFixtures(self):
-        proc = 'SELECT FixtureId, Name, Location, Brightness, FixtureType \
-                FROM Fixture'
-        rows = Database.ExecuteScript(proc)
+        args = {'id' : 'NULL', 'name' : 'NULL', 'location':'NULL',
+                 'brightness':'NULL', 'fixtureType':'NULL' }
+        script = ProcedureManager.GetProcedure('GetFixture', args)
+        rows = Database.ExecuteScript(script)
         fixtures = []
-        for r in rows
+        for r in rows:
             fixtures.append(Fixture(r['FixtureId'], r['Name'], r['Location'],
                                     r['FixtureType'], r['Brightness']))
         return fixtures
     
     def GetFixture(self, id = None, name = None):
-        fixtures = self.GetFixtures()
-        for f in fixtures:
-            if f.id == id:
-                return f
-            if f.name == name
-                return f
-        return None   
+        args = {'id' : id, 'name' : name }
+        script = ProcedureManager.GetProcedure('GetFixture', args)
+        rows = Database.ExecuteScript(script)
+        fixtures = []
+        for r in rows:
+            fixtures.append(Fixture(r['FixtureId'], r['Name'], r['Location'],
+                                    r['FixtureType'], r['Brightness']))
+        return fixtures
     
 class FixtureType():
         Blank = 1

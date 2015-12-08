@@ -1,39 +1,39 @@
 PRAGMA foreign_keys = on;
 
 CREATE TABLE Fixture
-    (FixtureId      INT PRIMARY KEY NOT NULL AUTOINCREMENT,
+    (FixtureId      INTEGER PRIMARY KEY AUTOINCREMENT,
     Name            VARCHAR(50)     NOT NULL,
     Location        VARCHAR(5)      NOT NULL,
-    Brightness      INT             NOT NULL,
-    FixtureType     INT             NOT NULL);
+    Brightness      INTEGER         NOT NULL,
+    FixtureType     INTEGER         NOT NULL);
     
 CREATE TABLE Preset
-    (PresetId       INT PRIMARY KEY NOT NULL AUTOINCREMENT,
+    (PresetId       INTEGER PRIMARY KEY AUTOINCREMENT,
     Name            VARCHAR(50)     NOT NULL);
 
 CREATE TABLE FixturePresetAssoc
-    (FixturePresetAssocId INT PRIMARY KEY NOT NULL AUTOINCREMENT,
-    FixtureId       INT NOT NULL,
-    PresetId        INT NOT NULL,
+    (FixturePresetAssocId INTEGER PRIMARY KEY AUTOINCREMENT,
+    FixtureId       INTEGER NOT NULL,
+    PresetId        INTEGER NOT NULL,
     FOREIGN KEY(FixtureId) REFERENCES Fixture(FixtureId)
     FOREIGN KEY(PresetId) REFERENCES Preset(PresetId) );
 
 CREATE TABLE Schedule
-    (ScheduleId     INT PRIMARY KEY NOT NULL AUTOINCREMENT,
+    (ScheduleId     INTEGER PRIMARY KEY AUTOINCREMENT,
     Name            VARCHAR(50) NOT NULL,
     Days            VARCHAR(250) NOT NULL,
     Times           VARCHAR(250) NOT NULL,
     Active          BOOL NOT NULL );
     
 CREATE TABLE PresetScheduleAssoc
-    (PresetScheduleAssocId   INT PRIMARY KEY NOT NULL AUTOINCREMENT,
-    PresetId        INT NOT NULL,
-    ScheduleId      INT NOT NULL,
+    (PresetScheduleAssocId   INTEGER PRIMARY KEY AUTOINCREMENT,
+    PresetId        INTEGER NOT NULL,
+    ScheduleId      INTEGER NOT NULL,
     FOREIGN KEY (PresetId) REFERENCES Preset(Preset),
     FOREIGN KEY (ScheduleId) REFERENCES Schedule(ScheduleId) );
     
 CREATE TABLE User
-    (UserId         INT PRIMARY KEY NOT NULL AUTOINCREMENT,
+    (UserId         INTEGER PRIMARY KEY AUTOINCREMENT,
     FirstName       VARCHAR(50) NOT NULL,
     LastName        VARCHAR(50) NOT NULL, 
     UserName        VARCHAR(50) NOT NULL,
