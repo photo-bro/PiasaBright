@@ -3,7 +3,7 @@ Created on Dec 3, 2015
 
 @author: jharm
 '''
-from DB import Database, ProcedureManager
+from DB import Database
 
 class FixtureManager():
     
@@ -26,20 +26,21 @@ class FixtureManager():
         return Database.ExecuteScript(proc)
     
     def GetFixtures(self):
-        args = {'id' : 'NULL', 'name' : 'NULL', 'location':'NULL',
-                 'brightness':'NULL', 'fixtureType':'NULL' }
-        script = ProcedureManager.GetProcedure('GetFixture', args)
-        rows = Database.ExecuteScript(script)
-        fixtures = []
+        args = {'id' : 'NULL',
+                'name' : 'NULL', 
+                'location':'NULL',
+                'brightness':'NULL',
+                'fixtureType':'NULL' }
+        rows = Database.ExecuteScriptFile('GetFixture', args)
+        fixtures = [] 
         for r in rows:
-            fixtures.append(Fixture(r['FixtureId'], r['Name'], r['Location'],
-                                    r['FixtureType'], r['Brightness']))
+            fixtures.append(Fixture(r[0], r[1], r[2], r[3], r[4]))
         return fixtures
     
     def GetFixture(self, id = None, name = None):
-        args = {'id' : id, 'name' : name }
-        script = ProcedureManager.GetProcedure('GetFixture', args)
-        rows = Database.ExecuteScript(script)
+        args = {'id' : id, 'name' : name, 'location':'NULL',
+                 'brightness':'NULL', 'fixtureType':'NULL'}
+        rows = Database.ExecuteScriptFile('GetFixture', args)
         fixtures = []
         for r in rows:
             fixtures.append(Fixture(r['FixtureId'], r['Name'], r['Location'],

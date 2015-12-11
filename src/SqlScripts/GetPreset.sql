@@ -18,4 +18,4 @@ FROM
     Preset p
 WHERE
     (p.PresetId = &id& OR &id& IS NULL) 
-    AND (p.Name = &name& or &name& IS NULL)
+    AND (p.Name = &name& or &name& IS NULL);

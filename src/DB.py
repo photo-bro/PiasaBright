@@ -3,17 +3,21 @@ Created on Dec 5, 2015
 
 @author: jharm
 '''
-import sqlite3, os
-from Singleton import Singleton
+import os
+from sqlite3 import dbapi2 as sqlite
 
 class Database:
     _connection = None
     _cursor = None
     _isConnected = False
+    
     @classmethod
     def OpenDb(cls):
         if cls._connection is None or cls._cursor is None:
-            cls._connection = sqlite3.connect('PiasaBright.db', check_same_thread=False)
+            dbName = 'PiasaBright.db'
+            cls._connection = sqlite.connect(dbName, 
+                                            detect_types=sqlite.PARSE_DECLTYPES,
+                                            check_same_thread=False)
             cls._cursor = cls._connection.cursor()
             cls._isConnected = True
     
@@ -26,25 +30,20 @@ class Database:
          
     
     @classmethod
-    def ExeceuteScriptFile(cls, script):
+    def ExecuteScriptFile(cls, script, args = None):
         '''
         script is the file name (not full path) for the SQL script
         NOTE: script must be in src/SqlScripts/ to run.
         '''
         if not cls.IsConnected():
             return False
+        data = cls.GetProcedure(script, args)
         try:
-            with open ('SqlScripts/' + script + '.sql', "r") as myfile:
-                data=myfile.read()
-            try:
-                cls._cursor.executescript(data)
-                return cls._cursor.fetchall()
-            except:
-                raise
-        except FileNotFoundError:
-            raise
+            cls._cursor.execute(data)
+            rows = cls._cursor.fetchall()
+            return rows
         except:
-            return []
+            raise
         
     @classmethod
     def ExecuteScript(cls, script):
@@ -60,10 +59,8 @@ class Database:
     def IsConnected(cls):
         return cls._isConnected
     
-class ProcedureManager:
-    
     @staticmethod
-    def GetProcedure( procedureName, arguments):
+    def GetProcedure(procedureName, arguments):
         '''
         procedureName: File name for SQL script sans '.sql'. Must be in local
         /SqlScripts folder
@@ -84,6 +81,8 @@ class ProcedureManager:
                 rawProc = rawProc.replace('&{}&'.format(argName), argVal)
                         
         return rawProc
+    
+    
         
         
         

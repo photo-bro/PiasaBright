@@ -18,4 +18,4 @@ FROM
     INNER JOIN PresetScheduleAssoc psa ON psa.ScheduleId = s.ScheduleId
     INNER JOIN Preset p ON fpa.PresetId = p.PresetId
 WHERE
-    (s.ScheduleId = &id& OR &id& IS NULL)
+    (s.ScheduleId = &id& OR &id& IS NULL);

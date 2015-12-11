@@ -33,10 +33,15 @@ class FixtureApi(Resource):
         
     def get(self, id):
         fixtures = self.FixManager.GetFixtures()
-        s = {}
-        for f in fixtures:
-            s.append(f.ToDictionary())
-        return {'fixtures' : s }
+        if not fixtures:
+            return {}
+        fixList = []
+        if len(fixtures) > 1:
+            for f in fixtures:
+                fixList.append(f.ToDictionary())
+        else:
+            fixList.append(fixtures[0])
+        return {'fixtures' : fixList }
     
     def post(self):
         pass

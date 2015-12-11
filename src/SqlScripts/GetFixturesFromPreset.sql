@@ -21,4 +21,4 @@ FROM
     INNER JOIN FixturePresetAssoc fpa ON fpa.PresetId = p.PresetId
     INNER JOIN Fixture f ON fpa.FixtureId = f.FixtureId
 WHERE
-    (p.PresetId = &id& OR &id& IS NULL)
+    (p.PresetId = &id& OR &id& IS NULL);

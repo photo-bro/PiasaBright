@@ -9,8 +9,8 @@
 * &id&
 * &name&
 * &location&
-* &brightness&
 * &fixtureType&
+* &brightness&
 *
 * ************************ */
 
@@ -18,8 +18,8 @@ SELECT
     f.FixtureId, 
     f.Name,
     f.Location,
-    f.Brightness,
-    f.FixtureType
+    f.FixtureType,
+    f.Brightness
 FROM
     Fixture f
 WHERE
@@ -27,4 +27,4 @@ WHERE
     AND (f.Name = &name& or &name& IS NULL)
     AND (f.Location = &location& or &location& IS NULL)
     AND (f.Brightness = &brightness& or &brightness& IS NULL)
-    AND (f.FixtureType = &fixtureType& or &fixtureType& IS NULL);
+    AND (f.FixtureType = &fixtureType& or &fixtureType& IS NULL); 

@@ -27,4 +27,4 @@ WHERE
     AND (s.Name = &name& or &name& IS NULL)
     AND (s.Days = &days& or &days& IS NULL)
     AND (s.Times = &times& or &times& IS NULL)
-    AND (s.Active = &active& or &active& IS NULL)
+    AND (s.Active = &active& or &active& IS NULL);
