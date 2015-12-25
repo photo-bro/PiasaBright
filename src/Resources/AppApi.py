@@ -26,12 +26,27 @@ class PresetApi(Resource):
     def put(self):
         pass
     
-class FixtureApi(Resource):
+class FixtureGetApi(Resource):
+    def __init__(self):
+        self.FixManager = FixtureManager()
     
+    def get(self, id):
+        fixtures = self.FixManager.GetFixture(id, None)
+        if not fixtures:
+            return {}
+        fixList = []
+        if len(fixtures) > 1:
+            for f in fixtures:
+                fixList.append(f.ToDictionary())
+        else:
+            fixList.append(fixtures[0].ToDictionary())
+        return {'fixtures' : fixList }
+    
+class FixtureApi(Resource):
     def __init__(self):
         self.FixManager = FixtureManager()
         
-    def get(self, id):
+    def get(self):
         fixtures = self.FixManager.GetFixtures()
         if not fixtures:
             return {}
@@ -40,7 +55,7 @@ class FixtureApi(Resource):
             for f in fixtures:
                 fixList.append(f.ToDictionary())
         else:
-            fixList.append(fixtures[0])
+            fixList.append(fixtures[0].ToDictionary())
         return {'fixtures' : fixList }
     
     def post(self):
@@ -49,3 +64,15 @@ class FixtureApi(Resource):
         pass
     def put(self):
         pass
+    
+class Response():
+    
+    def __init__(self, message, errorMessage, responseCode):
+        self.Message = message
+        self.ErrorMessage = errorMessage
+        self.ResponseCode = responseCode
+    
+    def GenerateResponse(self):
+        dic = {'Message' : self.Message,
+               'Response Code' : self.ResponseCode,
+               'Error Message' : self.ErrorMessage}

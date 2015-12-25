@@ -13,7 +13,7 @@ from flask_httpauth import HTTPBasicAuth
 
 # local
 from Resources.BaseApi import Ping, Auth
-from Resources.AppApi import ScheduleApi, PresetApi, FixtureApi
+from Resources.AppApi import ScheduleApi, PresetApi, FixtureApi, FixtureGetApi
 from DB import Database
 
 app = Flask(__name__)
@@ -31,6 +31,7 @@ api.add_resource(Auth, '/auth')
 api.add_resource(ScheduleApi, '/schedules/<int:id>')
 api.add_resource(PresetApi, '/presets/<int:id>')
 api.add_resource(FixtureApi, '/fixtures/<int:id>')
+api.add_resource(FixtureGetApi, '/fixtures')
 
 
 

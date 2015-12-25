@@ -30,7 +30,7 @@ class Database:
          
     
     @classmethod
-    def ExecuteScriptFile(cls, script, args = None):
+    def ExecuteStatementFile(cls, script, args = None):
         '''
         script is the file name (not full path) for the SQL script
         NOTE: script must be in src/SqlScripts/ to run.
@@ -44,13 +44,22 @@ class Database:
             return rows
         except:
             raise
-        
     @classmethod
-    def ExecuteScript(cls, script):
+    def ExecuteScriptFile(cls, script, args = None):
+        if not cls.IsConnected():
+            return 'Database Not Connected'
+        data = cls.GetProcedure(script, args)
+        try:
+            cls._cursor.executescript(data)
+        except:
+            return 'Error Running Script'
+    
+    @classmethod
+    def ExecuteStatement(cls, statement):
         if not cls.IsConnected():
             return False
         try:
-            cls._cursor.executescript(script)
+            cls._cursor.execute(statement)
             return cls._cursor.fetchall()
         except:
             raise
@@ -78,7 +87,7 @@ class Database:
         # replace placeholder names with arguments
         if arguments:
             for argName, argVal in arguments.items():
-                rawProc = rawProc.replace('&{}&'.format(argName), argVal)
+                rawProc = rawProc.replace('&{}&'.format(argName), str(argVal))
                         
         return rawProc
     

@@ -13,17 +13,21 @@ class FixtureManager():
             self.DB.OpenDb()
 
     def Add(self, fixture):
-        proc = 'INSERT INTO Fixture (Name, Location, Brightness, FixtureType) \
-                VALUES ({0}, {1}, {2}, {3})'.format(fixture.Name,
-                                                     fixture.Location,
-                                                     fixture.Brightness,
-                                                     fixture.FixtureType)
-        Database.ExecuteScript(proc)
-    
+        if not fixture:
+            raise Exception('fixture')
+        args = {'name' : fixture.Name, 
+                'location':fixture.Location,
+                'brightness':fixture.Brightness,
+                'fixtureType': fixture.FixtureType}    
+        errMsg = Database.ExecuteScriptFile('AddFixture', args)
+        return errMsg;
+        
     def Remove(self, fixture):
-        proc = 'DELETE FROM Fixture f \
-                WHERE f.Id = {0}'.format(fixture.Id)
-        return Database.ExecuteScript(proc)
+        if not fixture:
+            raise Exception('fixture')
+        args = {'id' : fixture.Id}
+        errMsg = Database.ExecuteScriptFile('DeleteFixture', args)
+        return errMsg
     
     def GetFixtures(self):
         args = {'id' : 'NULL',
@@ -31,20 +35,23 @@ class FixtureManager():
                 'location':'NULL',
                 'brightness':'NULL',
                 'fixtureType':'NULL' }
-        rows = Database.ExecuteScriptFile('GetFixture', args)
+        rows = Database.ExecuteStatementFile('GetFixture', args)
         fixtures = [] 
         for r in rows:
             fixtures.append(Fixture(r[0], r[1], r[2], r[3], r[4]))
         return fixtures
     
-    def GetFixture(self, id = None, name = None):
-        args = {'id' : id, 'name' : name, 'location':'NULL',
+    def GetFixture(self, fixtureId = 'NULL', name = 'NULL'):
+        if not fixtureId:
+            fixtureId = 'NULL'
+        if not name:
+            name = 'NULL'
+        args = {'id' : fixtureId, 'name' : name, 'location':'NULL',
                  'brightness':'NULL', 'fixtureType':'NULL'}
-        rows = Database.ExecuteScriptFile('GetFixture', args)
+        rows = Database.ExecuteStatementFile('GetFixture', args)
         fixtures = []
         for r in rows:
-            fixtures.append(Fixture(r['FixtureId'], r['Name'], r['Location'],
-                                    r['FixtureType'], r['Brightness']))
+            fixtures.append(Fixture(r[0], r[1], r[2], r[3], r[4]))
         return fixtures
     
 class FixtureType():
